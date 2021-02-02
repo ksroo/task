@@ -1,0 +1,48 @@
+{
+    "preferred-comps": [
+        {
+            "id": "1",
+            "name": "Champagne"
+        },
+        {
+            "id": "2",
+            "name": "Martini"
+        },
+        {
+            "id": "3",
+            "name": "Red Wine"
+        },
+        {
+            "id": "4",
+            "name": "White Wine"
+        },
+        {
+            "id": "5",
+            "name": "Draft Beer"
+        },
+        {
+            "id": "6",
+            "name": "Imported Beer"
+        },
+        {
+            "id": "7",
+            "name": "Shrimp Cocktail"
+        },
+        {
+            "id": "8",
+            "name": "Steak Dinner"
+        },        
+        {
+            "id": "9",
+            "name": "Chocolate Cake"
+        },
+        {
+            "id": "10",
+            "name": "Cheescake"
+        },
+        {
+            "id": "11",
+            "name": "Strip Steak Dinner"
+        }
+    ]
+}

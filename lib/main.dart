@@ -9,29 +9,78 @@ import 'package:profile/util/const.dart';
 import 'app/app.dart';
 import 'firebase/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    await Auth().init();
-    Auth().loginOnSimulator('bertbeck@gmail.com');
+  await Firebase.initializeApp();
+  await Auth().init();
+  Auth().loginOnSimulator('bertbeck@gmail.com');
 
-    // walid firebase
+  // walid firebase
 
+  //var _ref = FirebaseDatabase.instance.reference().child("preferred-comps");
 
+  // final String url = "https://task1-11546-default-rtdb.firebaseio.com/preferred-comps.json";
+  // http.post(url,body: json.encode({
+  //   "preferred-comps": [
+  //     {
+  //       "id": "1",
+  //       "name": "Champagne"
+  //     },
+  //     {
+  //       "id": "2",
+  //       "name": "Martini"
+  //     },
+  //     {
+  //       "id": "3",
+  //       "name": "Red Wine"
+  //     },
+  //     {
+  //       "id": "4",
+  //       "name": "White Wine"
+  //     },
+  //     {
+  //       "id": "5",
+  //       "name": "Draft Beer"
+  //     },
+  //     {
+  //       "id": "6",
+  //       "name": "Imported Beer"
+  //     },
+  //     {
+  //       "id": "7",
+  //       "name": "Shrimp Cocktail"
+  //     },
+  //     {
+  //       "id": "8",
+  //       "name": "Steak Dinner"
+  //     },
+  //     {
+  //       "id": "9",
+  //       "name": "Chocolate Cake"
+  //     },
+  //     {
+  //       "id": "10",
+  //       "name": "Cheescake"
+  //     },
+  //     {
+  //       "id": "11",
+  //       "name": "Strip Steak Dinner"
+  //     }
+  //   ]
+  // }));
 
-
-  runApp(  MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  
   Future<dynamic> init() async {
     // For all platforms:
     // Initialize firebase and authentication
 
- //   await Firebase.initializeApp();
- //   await Auth().init();
+    //   await Firebase.initializeApp();
+    //   await Auth().init();
 
     //  Running on the web
 
@@ -60,7 +109,6 @@ class MyApp extends StatelessWidget {
         Auth().loginOnSimulator('bertbeck@gmail.com');
       App.emailLoginUrl = 'https://tenfins.page.link/6SuK';
     } else
-
     // Running on Android
     if (Dartio.Platform.isAndroid) {
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();

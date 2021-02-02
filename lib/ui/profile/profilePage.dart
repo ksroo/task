@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import '../../add_product.dart';
 import '../../app/app.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,27 +10,22 @@ import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-
-class Animal {
+class Preferredcomps {
   final int id;
   final String name;
 
-  Animal({
+  Preferredcomps({
     this.id,
     this.name,
   });
 }
 
-
 class ProfilePage extends StatefulWidget {
-
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   bool _edited = false;
   File _image;
   String _url;
@@ -37,58 +33,43 @@ class _ProfilePageState extends State<ProfilePage> {
   String valueChoose;
   String camps;
 
+  List<Product> productsList = [];
   List venues = [
     "Empire-Boston",
     "Mystique-BostonHarbor",
   ];
 
-  List preferred = [
-    "Remy Martin",
-    "Dom Perignon",
-    "Havana Club Mojito",
+
+  static List<Preferredcomps> _preferredcomps = [
+    Preferredcomps(id: 1, name: "Champagne"),
+    Preferredcomps(id: 2, name: "Martini"),
+    Preferredcomps(id: 3, name: "Red Wine"),
+    Preferredcomps(id: 4, name: "White Wine"),
+    Preferredcomps(id: 5, name: "Draft Beer"),
+    Preferredcomps(id: 6, name: "Imported Beer"),
+    Preferredcomps(id: 7, name: "Shrimp Cocktail"),
+    Preferredcomps(id: 8, name: "Steak Dinner"),
+    Preferredcomps(id: 9, name: "Chocolate Cake"),
+    Preferredcomps(id: 10, name: "Cheescake"),
+    Preferredcomps(id: 11, name: "Strip Steak Dinner"),
+
+
   ];
 
-  static List<Animal> _animals = [
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-    Animal(id: 4, name: "Horse"),
-    Animal(id: 5, name: "Tiger"),
-    Animal(id: 6, name: "Penguin"),
-    Animal(id: 7, name: "Spider"),
-    Animal(id: 8, name: "Snake"),
-    Animal(id: 9, name: "Bear"),
-    Animal(id: 10, name: "Beaver"),
-    Animal(id: 11, name: "Cat"),
-    Animal(id: 12, name: "Fish"),
-    Animal(id: 13, name: "Rabbit"),
-    Animal(id: 14, name: "Mouse"),
-    Animal(id: 15, name: "Dog"),
-    Animal(id: 16, name: "Zebra"),
-    Animal(id: 17, name: "Cow"),
-    Animal(id: 18, name: "Frog"),
-    Animal(id: 19, name: "Blue Jay"),
-    Animal(id: 20, name: "Moose"),
-    Animal(id: 21, name: "Gecko"),
-    Animal(id: 22, name: "Kangaroo"),
-    Animal(id: 23, name: "Shark"),
-    Animal(id: 24, name: "Crocodile"),
-    Animal(id: 25, name: "Owl"),
-    Animal(id: 26, name: "Dragonfly"),
-    Animal(id: 27, name: "Dolphin"),
-  ];
-
-
-  final _items = _animals
-      .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
+  final _items = _preferredcomps
+      .map((preferred) =>
+      MultiSelectItem<Preferredcomps>(preferred, preferred.name))
       .toList();
-  List<Animal> _selectedAnimals = [];
-  List<Animal> _selectedAnimals2 = [];
-
+  List<Preferredcomps> _selectedAnimals = [];
+  List<Preferredcomps> _selectedAnimals2 = [];
 
   final _multiSelectKey = GlobalKey<FormFieldState>();
 
-
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -345,114 +326,42 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(14),
+                  padding: EdgeInsets.only(left: 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Preferred Comps",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Theme
-                              .of(context)
-                              .accentColor,
+                      MultiSelectDialogField(
+                        items: _items,
+                        title: Text("preferred-comps"),
+                        selectedColor: Colors.grey,
+
+                        buttonIcon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 36,
+                          color: Colors.grey,
                         ),
-                      ),
-                      DropdownButton(
-                        hint: Text('Select '),
-                        dropdownColor: Colors.grey,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 36,
-                        isExpanded: true,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+
+                        buttonText: Text(
+                          "Preferred Comps",
+                          style: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .accentColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
-                        value: camps,
-                        onChanged: (newValue) {
-                          setState(() {
-                            camps = newValue;
-                          });
+                        onConfirm: (results) {
+                          _selectedAnimals = results;
                         },
-                        items: venues.map((valueItem) {
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
                       ),
+
+
                     ],
                   ),
                 ),
 
-                MultiSelectDialogField(
-                  items: _items,
-                  title: Text("Animals"),
-                  selectedColor: Theme.of(context).accentColor,
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
-                    borderRadius: BorderRadius.all(Radius.circular(40)),
-                    border: Border.all(
-                      color: Theme.of(context).accentColor,
-                      width: 2,
-                    ),
-                  ),
-                  buttonIcon: Icon(
-                    Icons.pets,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  buttonText: Text(
-                    "Favorite Animals",
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      fontSize: 16,
-                    ),
-                  ),
-                  onConfirm: (results) {
-                    _selectedAnimals = results;
-                  },
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(.4),
-                    border: Border.all(
-                      color: Theme.of(context).accentColor,
-                      width: 2,
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      MultiSelectBottomSheetField(
-                        initialChildSize: 0.4,
-                        listType: MultiSelectListType.CHIP,
-                        searchable: true,
-                        buttonText: Text("Favorite Animals"),
-                        title: Text("Animals"),
-                        items: _items,
-                        onConfirm: (values) {
-                          _selectedAnimals2 = values;
-                        },
-                        chipDisplay: MultiSelectChipDisplay(
-                          onTap: (value) {
-                            setState(() {
-                              _selectedAnimals2.remove(value);
-                            });
-                          },
-                        ),
-                      ),
-                      _selectedAnimals2 == null || _selectedAnimals2.isEmpty
-                          ? Container(
-                          padding: EdgeInsets.all(10),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "None selected",
-                            style: TextStyle(color: Colors.black54),
-                          ))
-                          : Container(),
-                    ],
-                  ),
-                ),
+
                 // ListTile(
                 //
                 //   title: TextFormField(
@@ -531,6 +440,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // walid code api firebase
+
   void pickImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
@@ -563,23 +474,21 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void add() {
-    final String url =
-        "https://task1-11546-default-rtdb.firebaseio.com/product.json";
-    http.post(url,
-        body: json.encode({
-          "Venues": [
-            "Empire-Boston",
-            "Mystique-BostonHarbor",
-          ],
-          "Preferred Comps": [
-            "Remy Martin",
-            "Dom Perignon",
-            "Havana Club Mojito",
-          ],
-        }));
-    //
-    //   saveChanges() {}
-    // }
+  Future<void> fetchData() async {
+    const url =
+        "https://task1-11546-default-rtdb.firebaseio.com/preferred-comps.json";
+    try {
+      final http.Response res = await http.get(url);
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      extractedData.forEach((prodId, prodData) {
+        productsList.add(Product(
+          id: prodId,
+          name: prodData,
+        ));
+      });
+    } catch (error) {
+      throw error;
+    }
   }
+
 }
