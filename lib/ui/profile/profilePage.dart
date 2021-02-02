@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             CircleAvatar(
                               backgroundColor: Colors.grey,
                               backgroundImage:
-                                  _image == null ? null : FileImage(_image),
+                              _image == null ? null : FileImage(_image),
                               radius: 70,
                             ),
                             SizedBox(height: 20.0),
@@ -115,7 +115,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme
+                                        .of(context)
+                                        .accentColor,
                                   ),
                                 ),
                               ],
@@ -129,7 +131,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme
+                                        .of(context)
+                                        .accentColor,
                                   ),
                                 ),
                               ],
@@ -167,7 +171,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).accentColor,
+                      color: Theme
+                          .of(context)
+                          .accentColor,
                     ),
                   ),
                 ),
@@ -180,7 +186,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelStyle: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
-                            color: Theme.of(context).accentColor)),
+                            color: Theme
+                                .of(context)
+                                .accentColor)),
                   ),
                 ),
                 ListTile(
@@ -192,7 +200,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelStyle: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
-                            color: Theme.of(context).accentColor)),
+                            color: Theme
+                                .of(context)
+                                .accentColor)),
                   ),
                 ),
                 // ListTile(
@@ -230,7 +240,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelStyle: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
-                            color: Theme.of(context).accentColor)),
+                            color: Theme
+                                .of(context)
+                                .accentColor)),
                   ),
                 ),
 
@@ -244,7 +256,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: Theme.of(context).accentColor,
+                          color: Theme
+                              .of(context)
+                              .accentColor,
                         ),
                       ),
                       DropdownButton(
@@ -283,7 +297,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: Theme.of(context).accentColor,
+                          color: Theme
+                              .of(context)
+                              .accentColor,
                         ),
                       ),
                       DropdownButton(
@@ -401,7 +417,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void uploadImage(context) async {
     try {
       FirebaseStorage storage =
-          FirebaseStorage.instanceFor(bucket: 'ggs://task1-11546.appspot.com');
+      FirebaseStorage.instanceFor(bucket: 'ggs://task1-11546.appspot.com');
       final ref = FirebaseStorage.instance.ref().child(p.basename(_image.path));
       UploadTask uploadTask = ref.putFile(_image);
       TaskSnapshot taskSnapshot = await uploadTask;
@@ -424,11 +440,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void add() {
-
     final String url =
         "https://task1-11546-default-rtdb.firebaseio.com/product.json";
     http.post(url,
-         body: json.encode({
+        body: json.encode({
           "Venues": [
             "Empire-Boston",
             "Mystique-BostonHarbor",
@@ -439,7 +454,8 @@ class _ProfilePageState extends State<ProfilePage> {
             "Havana Club Mojito",
           ],
         }));
-  //
-  //   saveChanges() {}
-  // }
+    //
+    //   saveChanges() {}
+    // }
+  }
 }
