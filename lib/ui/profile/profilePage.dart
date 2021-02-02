@@ -7,13 +7,29 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+
+
+class Animal {
+  final int id;
+  final String name;
+
+  Animal({
+    this.id,
+    this.name,
+  });
+}
+
 
 class ProfilePage extends StatefulWidget {
+
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   bool _edited = false;
   File _image;
   String _url;
@@ -31,6 +47,47 @@ class _ProfilePageState extends State<ProfilePage> {
     "Dom Perignon",
     "Havana Club Mojito",
   ];
+
+  static List<Animal> _animals = [
+    Animal(id: 1, name: "Lion"),
+    Animal(id: 2, name: "Flamingo"),
+    Animal(id: 3, name: "Hippo"),
+    Animal(id: 4, name: "Horse"),
+    Animal(id: 5, name: "Tiger"),
+    Animal(id: 6, name: "Penguin"),
+    Animal(id: 7, name: "Spider"),
+    Animal(id: 8, name: "Snake"),
+    Animal(id: 9, name: "Bear"),
+    Animal(id: 10, name: "Beaver"),
+    Animal(id: 11, name: "Cat"),
+    Animal(id: 12, name: "Fish"),
+    Animal(id: 13, name: "Rabbit"),
+    Animal(id: 14, name: "Mouse"),
+    Animal(id: 15, name: "Dog"),
+    Animal(id: 16, name: "Zebra"),
+    Animal(id: 17, name: "Cow"),
+    Animal(id: 18, name: "Frog"),
+    Animal(id: 19, name: "Blue Jay"),
+    Animal(id: 20, name: "Moose"),
+    Animal(id: 21, name: "Gecko"),
+    Animal(id: 22, name: "Kangaroo"),
+    Animal(id: 23, name: "Shark"),
+    Animal(id: 24, name: "Crocodile"),
+    Animal(id: 25, name: "Owl"),
+    Animal(id: 26, name: "Dragonfly"),
+    Animal(id: 27, name: "Dolphin"),
+  ];
+
+
+  final _items = _animals
+      .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
+      .toList();
+  List<Animal> _selectedAnimals = [];
+  List<Animal> _selectedAnimals2 = [];
+
+
+  final _multiSelectKey = GlobalKey<FormFieldState>();
+
 
 
   @override
@@ -329,6 +386,73 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
 
+                MultiSelectDialogField(
+                  items: _items,
+                  title: Text("Animals"),
+                  selectedColor: Theme.of(context).accentColor,
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
+                    border: Border.all(
+                      color: Theme.of(context).accentColor,
+                      width: 2,
+                    ),
+                  ),
+                  buttonIcon: Icon(
+                    Icons.pets,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  buttonText: Text(
+                    "Favorite Animals",
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: 16,
+                    ),
+                  ),
+                  onConfirm: (results) {
+                    _selectedAnimals = results;
+                  },
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(.4),
+                    border: Border.all(
+                      color: Theme.of(context).accentColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      MultiSelectBottomSheetField(
+                        initialChildSize: 0.4,
+                        listType: MultiSelectListType.CHIP,
+                        searchable: true,
+                        buttonText: Text("Favorite Animals"),
+                        title: Text("Animals"),
+                        items: _items,
+                        onConfirm: (values) {
+                          _selectedAnimals2 = values;
+                        },
+                        chipDisplay: MultiSelectChipDisplay(
+                          onTap: (value) {
+                            setState(() {
+                              _selectedAnimals2.remove(value);
+                            });
+                          },
+                        ),
+                      ),
+                      _selectedAnimals2 == null || _selectedAnimals2.isEmpty
+                          ? Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "None selected",
+                            style: TextStyle(color: Colors.black54),
+                          ))
+                          : Container(),
+                    ],
+                  ),
+                ),
                 // ListTile(
                 //
                 //   title: TextFormField(
